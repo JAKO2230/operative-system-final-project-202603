@@ -4,8 +4,8 @@
 **Imagen Docker Hub:** `jako2230/so-backend:1.0`
 
 ## URLs en Producción (HTTPS)
-* **Frontend (AWS EC2):** https://scaleautomatization.tech
-* **Backend API (Azure VM):** https://scaleautomatization.tech
+* **Frontend (AWS EC2):** https://jacobo.scaleautomatization.tech/
+* **Backend API (Azure VM):** https://api-jacobo.scaleautomatization.tech/api/sistemas
 
 ## Arquitectura Desplegada
 1. **Frontend (AWS EC2 - Ubuntu):** Servido de forma estática mediante Nginx con certificado TLS gestionado por Let's Encrypt (Certbot). Interfaz diseñada con Bento Grid y Soft UI (Neumorphism) con soporte para modo claro/oscuro.
