@@ -3,136 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistemas Operativos · Soft UI</title>
+  <meta name="description" content="Explora la evolución histórica, arquitectura de kernel y paradigmas de los sistemas operativos. Proyecto Multi-Cloud AWS + Azure por Jacobo Castañeda Alarcón." />
+  <title>Sistemas Operativos · Jacobo Castañeda Alarcón</title>
   <link rel="preconnect" href="https://googleapis.com" />
   <link rel="preconnect" href="https://gstatic.com" crossorigin />
   <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    :root, [data-theme="light"] {
-      --bg: #e6e9ef; --surface: #e6e9ef; --text-main: #2d3446; --text-sub: #6e788d;
-      --accent: #6d5dfc; --accent-glow: rgba(109, 93, 252, 0.35);
-      --sh-dark: #c5cad4; --sh-light: #ffffff; --border-subtle: rgba(255, 255, 255, 0.55);
-    }
-    [data-theme="dark"] {
-      --bg: #23262b; --surface: #23262b; --text-main: #edf2f7; --text-sub: #94a3b8;
-      --accent: #7c6dfa; --accent-glow: rgba(124, 109, 250, 0.4);
-      --sh-dark: #16181b; --sh-light: #30343b; --border-subtle: rgba(255, 255, 255, 0.04);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background-color: var(--bg); color: var(--text-main); min-height: 100vh; transition: background-color 0.35s ease, color 0.35s ease; }
-    .container { max-width: 1180px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-    .header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; margin-bottom: 2.25rem; }
-    .status-pill { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.45rem 1rem; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--text-sub); background: var(--surface); box-shadow: inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px var(--sh-light); margin-bottom: 0.85rem; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; }
-    .dot.error { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    h1 { font-size: clamp(1.9rem, 3.5vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; }
-    .subtitle { color: var(--text-sub); font-size: 0.96rem; margin-top: 0.25rem; }
-    .theme-switch-wrap { display: flex; align-items: center; gap: 0.85rem; padding: 0.65rem 1.1rem; border-radius: 22px; background: var(--surface); box-shadow: 7px 7px 14px var(--sh-dark), -7px -7px 14px var(--sh-light); }
-    .switch-label { font-size: 0.82rem; font-weight: 700; color: var(--text-sub); user-select: none; }
-    .power-switch { position: relative; width: 78px; height: 38px; border-radius: 999px; border: none; background: var(--surface); cursor: pointer; box-shadow: inset 4px 4px 8px var(--sh-dark), inset -4px -4px 8px var(--sh-light); transition: all 0.3s ease; display: flex; align-items: center; padding: 4px; }
-    .power-knob { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); box-shadow: 3px 3px 6px var(--sh-dark), -2px -2px 5px var(--sh-light); display: grid; place-items: center; color: var(--text-sub); transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s, color 0.3s; }
-    [data-theme="dark"] .power-switch { background: linear-gradient(145deg, #5e4ee6, #7c6dfa); box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.45); }
-    [data-theme="dark"] .power-knob { transform: translateX(40px); background: #23262b; color: #a78bfa; }
-    .toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-    .filter-track { display: inline-flex; flex-wrap: wrap; gap: 0.6rem; padding: 0.55rem; border-radius: 20px; background: var(--surface); box-shadow: inset 4px 4px 8px var(--sh-dark), inset -4px -4px 8px var(--sh-light); }
-    .neu-btn { appearance: none; border: 1px solid var(--border-subtle); background: var(--surface); color: var(--text-sub); font-family: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.6rem 1.15rem; border-radius: 14px; cursor: pointer; box-shadow: 5px 5px 10px var(--sh-dark), -5px -5px 10px var(--sh-light); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.45rem; }
-    .neu-btn:hover { color: var(--text-main); transform: translateY(-1px); }
-    .neu-btn:active, .neu-btn.active { color: var(--accent); box-shadow: inset 4px 4px 8px var(--sh-dark), inset -4px -4px 8px var(--sh-light); transform: translateY(0); }
-    .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(185px, auto); gap: 1.5rem; }
-    .bento-card { background: var(--surface); border-radius: 26px; padding: 1.65rem; border: 1px solid var(--border-subtle); box-shadow: 9px 9px 18px var(--sh-dark), -9px -9px 18px var(--sh-light); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.25s ease, box-shadow 0.3s ease, background-color 0.35s ease; }
-    .bento-card:hover { transform: translateY(-3px); }
-    .col-span-2 { grid-column: span 2; } .col-span-4 { grid-column: span 4; } .row-span-2 { grid-row: span 2; }
-    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
-    .year-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: var(--accent); padding: 0.35rem 0.8rem; border-radius: 12px; box-shadow: inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px var(--sh-light); }
-    .era-dial { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; color: var(--text-sub); box-shadow: 4px 4px 8px var(--sh-dark), -4px -4px 8px var(--sh-light); }
-    .card-title { font-size: 1.38rem; font-weight: 800; margin-top: 1rem; letter-spacing: -0.02em; }
-    .card-featured .card-title { font-size: 2.15rem; margin-top: 1.25rem; }
-    .card-desc { font-size: 0.9rem; color: var(--text-sub); margin-top: 0.75rem; line-height: 1.55; max-width: 65ch; }
-    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.4rem; padding-top: 1rem; }
-    .sunken-tag { font-size: 0.78rem; font-weight: 700; color: var(--text-main); padding: 0.45rem 0.95rem; border-radius: 12px; box-shadow: inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px var(--sh-light); }
-    .accent-bar { width: 44px; height: 8px; border-radius: 999px; box-shadow: inset 2px 2px 4px var(--sh-dark), inset -2px -2px 4px var(--sh-light); overflow: hidden; position: relative; }
-    .accent-bar::after { content: ''; position: absolute; inset: 0; width: 68%; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
-    .state-box { grid-column: 1 / -1; text-align: center; padding: 3.2rem 1.5rem; }
-    @media (max-width: 1024px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } .col-span-4 { grid-column: span 2; } }
-    @media (max-width: 640px) { .bento-grid { grid-template-columns: 1fr; } .col-span-2, .col-span-4, .row-span-2 { grid-column: span 1; grid-row: span 1; } }
-  </style>
+  <link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
+  <canvas id="flux-canvas" aria-hidden="true"></canvas>
   <main class="container">
     <header class="header">
       <div>
-        <div class="status-pill"><span class="dot" id="status-dot"></span><span id="api-status-text">Conectando a API...</span></div>
-        <h1>Sistemas Operativos</h1>
+        <div class="meta-pills">
+          <div class="status-pill"><span class="dot" id="status-dot"></span><span id="api-status-text">Conectando a API...</span></div>
+          <div class="author-pill">✦ DEV · JACOBO CASTAÑEDA ALARCÓN</div>
+        </div>
+        <div class="tech-title-wrap">
+          <div id="tech-title" class="tech-text" role="img" aria-label="Sistemas Operativos"><canvas class="tech-text-canvas"></canvas></div>
+        </div>
         <p class="subtitle">Arquitectura, evolución histórica y paradigmas de kernel</p>
       </div>
       <div class="theme-switch-wrap">
         <span class="switch-label" id="theme-text">MODO CLARO</span>
-        <button class="power-switch" id="theme-toggle" aria-label="Alternar tema claro u oscuro">
-          <span class="power-knob"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg></span>
+        <button class="power-switch" id="theme-toggle" aria-label="Alternar tema">
+          <span class="power-knob">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+          </span>
         </button>
       </div>
     </header>
     <section class="toolbar">
-      <div class="filter-track" role="group" aria-label="Filtros por tipo">
+      <div class="filter-track" role="group">
         <button class="neu-btn active" data-filter="all">Todos</button>
         <button class="neu-btn" data-filter="Kernel">Kernels</button>
         <button class="neu-btn" data-filter="Escritorio">Escritorio</button>
         <button class="neu-btn" data-filter="Móvil">Móvil</button>
       </div>
-      <button class="neu-btn" id="btn-reload">↻ Sincronizar</button>
+      <div class="toolbar-actions">
+        <input type="search" id="search-input" class="neu-input" placeholder="Buscar SO, año o tipo..." aria-label="Buscar sistema operativo" />
+        <select id="sort-select" class="neu-select" aria-label="Ordenar por">
+          <option value="default">Orden original</option>
+          <option value="year-asc">Año: más antiguo</option>
+          <option value="year-desc">Año: más reciente</option>
+          <option value="name-asc">Nombre: A → Z</option>
+        </select>
+        <button class="neu-btn" id="btn-reload">↻ Sincronizar</button>
+        <button class="neu-btn primary" id="btn-open-create">+ Nuevo SO</button>
+      </div>
     </section>
     <section class="bento-grid" id="bento-grid" aria-live="polite">
-      <div class="bento-card state-box"><p class="card-title">Cargando sistemas operativos...</p><p class="subtitle">Consultando endpoint /api/sistemas</p></div>
+      <div class="state-box"><p class="card-title">Cargando sistemas operativos...</p><p class="subtitle">Consultando endpoint /api/sistemas</p></div>
     </section>
   </main>
-  <script src="config.js?v=4"></script>
-  <script>
-    const htmlEl = document.documentElement, toggleBtn = document.getElementById('theme-toggle'), themeText = document.getElementById('theme-text');
-    function setTheme(theme) { htmlEl.setAttribute('data-theme', theme); themeText.textContent = theme === 'dark' ? 'MODO OSCURO' : 'MODO CLARO'; localStorage.setItem('so-theme', theme); }
-    setTheme(localStorage.getItem('so-theme') || 'light');
-    toggleBtn.addEventListener('click', () => setTheme(htmlEl.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
-    let sistemasData = [], currentFilter = 'all';
-    const gridEl = document.getElementById('bento-grid'), statusDot = document.getElementById('status-dot'), statusText = document.getElementById('api-status-text');
-    const descriptions = {
-      'UNIX': 'Base fundacional de los sistemas modernos multiusuario, multitarea y filosofía POSIX.',
-      'Linux': 'Núcleo monolítico modular de código abierto que impulsa servidores cloud y contenedores.',
-      'Windows NT': 'Arquitectura híbrida orientada a objetos con capa de abstracción de hardware (HAL).',
-      'Mac OS': 'Interfaz gráfica pionera que transformó la computación personal de escritorio.',
-      'Android': 'Plataforma móvil basada en kernel Linux optimizada para dispositivos táctiles, contenedores ART y ecosistemas abiertos.',
-      'iOS': 'Sistema móvil derivado de Darwin/XNU con alto aislamiento y eficiencia energética.',
-      'FreeRTOS': 'Microkernel determinista diseñado para sistemas embebidos de tiempo real crítico.',
-      'MS-DOS': 'Sistema monousuario de línea de comandos que estandarizó la arquitectura x86.'
-    };
-    function renderGrid() {
-      const filtered = sistemasData.filter(item => currentFilter === 'all' || item.tipo.toLowerCase().includes(currentFilter.toLowerCase()));
-      if (!filtered.length) { gridEl.innerHTML = `<div class="bento-card state-box"><p class="card-title">Sin coincidencias</p><p class="subtitle">No hay sistemas bajo "${currentFilter}".</p></div>`; return; }
-      gridEl.innerHTML = filtered.map((so, i) => {
-        const isLastAndEighth = (filtered.length === 8 && i === 7);
-        const span = i === 0 ? 'col-span-2 row-span-2 card-featured' : (i === 3 || i === 4 ? 'col-span-2' : (isLastAndEighth ? 'col-span-4' : ''));
-        const showDesc = (i === 0 || i === 3 || i === 4 || isLastAndEighth);
-        const desc = descriptions[so.nombre] || `Sistema operativo clasificado en ${so.tipo}.`;
-        return `<article class="bento-card ${span}"><div><div class="card-top"><span class="year-chip">${so.anio}</span><span class="era-dial">${String(Math.floor(so.anio / 10) * 10).slice(2)}s</span></div><h2 class="card-title">${so.nombre}</h2>${showDesc ? `<p class="card-desc">${desc}</p>` : ''}</div><div class="card-footer"><span class="sunken-tag">${so.tipo}</span><span class="accent-bar" aria-hidden="true"></span></div></article>`;
-      }).join('');
-    }
-    async function cargarSistemas() {
-      const baseUrl = (typeof API_URL !== 'undefined' ? API_URL : '').replace(/\/$/, '');
-      statusText.textContent = 'Sincronizando...'; statusDot.classList.remove('error');
-      try {
-        const res = await fetch(`${baseUrl}/api/sistemas`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        sistemasData = await res.json();
-        statusText.textContent = `API ACTIVA · ${sistemasData.length} REGISTROS`;
-        renderGrid();
-      } catch (err) {
-        statusDot.classList.add('error'); statusText.textContent = 'ERROR DE CONEXIÓN';
-        gridEl.innerHTML = `<div class="bento-card state-box"><p class="card-title">Sin conexión al backend</p><p class="subtitle">Revisa config.js (${baseUrl || 'sin URL'}).</p></div>`;
-      }
-    }
-    document.querySelectorAll('.neu-btn[data-filter]').forEach(btn => {
-      btn.addEventListener('click', () => { document.querySelectorAll('.neu-btn[data-filter]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderGrid(); });
-    });
-    document.getElementById('btn-reload').addEventListener('click', cargarSistemas);
-    cargarSistemas();
-  </script>
+
+  <div class="modal-backdrop" id="detail-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="year-chip" id="md-year">1969</span>
+          <h2 class="card-title" id="md-title" style="margin-top:0.65rem;">UNIX</h2>
+        </div>
+        <button class="modal-close" data-close-modal aria-label="Cerrar">✕</button>
+      </div>
+      <p class="subtitle" id="md-desc" style="line-height:1.6;"></p>
+      <div class="spec-grid">
+        <div class="spec-item"><span class="spec-label">Paradigma / Tipo</span><span class="spec-val" id="md-tipo">—</span></div>
+        <div class="spec-item"><span class="spec-label">Década / Era</span><span class="spec-val" id="md-era">—</span></div>
+        <div class="spec-item"><span class="spec-label">Arquitectura Kernel</span><span class="spec-val" id="md-kernel">—</span></div>
+        <div class="spec-item"><span class="spec-label">Sistema de Archivos</span><span class="spec-val" id="md-fs">—</span></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="neu-btn danger" id="btn-delete-so">🗑 Eliminar registro</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="create-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="author-pill">POST /api/sistemas</span>
+          <h2 class="card-title" style="margin-top:0.6rem;">Registrar Sistema Operativo</h2>
+        </div>
+        <button class="modal-close" data-close-modal aria-label="Cerrar">✕</button>
+      </div>
+      <form id="create-so-form" class="form-stack">
+        <div class="form-group"><label for="so-nombre">Nombre del Sistema Operativo</label><input type="text" id="so-nombre" class="neu-input" placeholder="Ej. Solaris, Debian, HarmonyOS" required /></div>
+        <div class="spec-grid" style="margin:0;">
+          <div class="form-group"><label for="so-tipo">Tipo / Paradigma</label><input type="text" id="so-tipo" class="neu-input" placeholder="Ej. Kernel monolítico" required /></div>
+          <div class="form-group"><label for="so-anio">Año de lanzamiento</label><input type="number" id="so-anio" class="neu-input" min="1950" max="2030" placeholder="Ej. 1992" required /></div>
+        </div>
+        <div class="spec-grid" style="margin:0;">
+          <div class="form-group"><label for="so-kernel">Arquitectura Kernel</label><input type="text" id="so-kernel" class="neu-input" placeholder="Ej. Monolítico / Microkernel" /></div>
+          <div class="form-group"><label for="so-fs">Sistema de Archivos</label><input type="text" id="so-fs" class="neu-input" placeholder="Ej. ZFS, ext4, APFS" /></div>
+        </div>
+        <div class="form-group"><label for="so-desc">Descripción breve</label><input type="text" id="so-desc" class="neu-input" placeholder="Aporte histórico o caso de uso principal" /></div>
+        <div class="form-msg" id="create-form-msg"></div>
+        <div class="form-actions">
+          <button type="button" class="neu-btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="neu-btn primary">Guardar registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="config.js?v=10"></script>
+  <script src="flux.js?v=10"></script>
+  <script src="techtext.js?v=10"></script>
+  <script src="scrollreveal.js?v=10"></script>
+  <script src="holo.js?v=10"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
